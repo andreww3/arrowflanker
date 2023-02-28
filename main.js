@@ -25,7 +25,16 @@ const key_mapping = {left: 'a', right: 'l'};
 
 var instructions = {
   type: jsPsychInstructions,
-  pages: [],
+  pages: [`<p>In this task, you will see five arrows on the screen, like the example below.</p>
+  <p class="stim"><<><<</p>
+  <p>Your job is to indicate which direction the <strong>middle</strong> arrow is pointing.</p>`,
+
+  `<p>Press <strong>A</strong> if the middle arrow is pointing left. (<)<br>
+  Press <strong>L</strong> if it is pointing right. (>)</p>
+  <p>Ignore the arrows on each side of the middle arrow - they are distractors.</p>`,
+  
+  `<p>Respond as quickly as you can without making mistakes</p>
+  <p>Make sure your index fingers are on A and L</p>`],
   show_clickable_nav: true
 }
 
