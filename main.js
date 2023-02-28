@@ -19,6 +19,8 @@ const test_stimuli = [
   }
 ];
 
+const key_mapping = {left: 'a', right: 'l'};
+
 // INSTRUCTIONS =========================================================
 
 var instructions = {
@@ -45,12 +47,18 @@ var flanker = {
 
 var feedback = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: `<div class="stim feedback">WRONG</div>`,
+  stimulus: () => {
+    var last_trial_data = jsPsych.data.get().last(1).values()[0];
+    var correct_response = key_mapping[last_trial_data.direction];
+    if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
+      return '';
+    } else {
+      return `<div class="stim feedback">WRONG</div>`;
+    }
+  },
   choices: "NO_KEYS",
   trial_duration: () => {
     var last_trial_data = jsPsych.data.get().last(1).values()[0];
-    console.log(last_trial_data);
-    var key_mapping = {left: 'a', right: 'l'};
     var correct_response = key_mapping[last_trial_data.direction];
     if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
       return 0;
