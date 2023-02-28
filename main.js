@@ -79,7 +79,10 @@ var trial = {
 
 var endscreen = {
   type: jsPsychInstructions,
-  pages: [],
+  pages: () => {
+    var data_cong = jsPsych.data.get().filter({condition: "congruent"});
+    var data_incong = jsPsych.data.get().filter({condition: "incongruent"});
+  },
   show_clickable_nav: true
 }
 
