@@ -42,6 +42,8 @@ var feedback = {
   trial_duration: () => {
     var jspsych_data = jsPsych.data.get();
     console.log(jspsych_data);
+    var key_mapping = {left: 'a', right: 'l'};
+    var correct_response = key_mapping[];
     //var last_trial_correct = jspsych_data.last(1).values()[0].correct;
     return 800;
   },
