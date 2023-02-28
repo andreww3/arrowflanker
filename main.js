@@ -32,7 +32,7 @@ var instructions = {
   `<p>Press <strong>A</strong> if the middle arrow is pointing left. (<)<br>
   Press <strong>L</strong> if it is pointing right. (>)</p>
   <p>Ignore the arrows on each side of the middle arrow - they are distractors.</p>`,
-  
+
   `<p>Respond as quickly as you can without making mistakes</p>
   <p>Make sure your index fingers are on A and L</p>`],
   show_clickable_nav: true
@@ -105,6 +105,6 @@ var endscreen = {
 
 // TIMELINE =============================================================
 
-var timeline = [trial];
+var timeline = [instructions, trial, endscreen];
 
 jsPsych.run(timeline);
