@@ -155,7 +155,8 @@ var endscreen = {
       You got <strong>${Math.round(accu_incong * 100)}%</strong> of these correct</p>
     `];
   },
-  show_clickable_nav: true
+  show_clickable_nav: false,
+  allow_keys: false
 }
 
 // TIMELINE =============================================================
