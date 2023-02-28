@@ -22,6 +22,7 @@ const test_stimuli = [
 const key_mapping = {left: 'a', right: 'l'};
 
 const num_trials = 8;
+const num_prac_trials = 5;
 
 // INSTRUCTIONS =========================================================
 
@@ -35,8 +36,9 @@ var instructions = {
   Press <strong>L</strong> if it is pointing right. (>)</p>
   <p>Ignore the arrows on each side of the middle arrow - they are distractors.</p>`,
 
-  `<p>Respond as quickly as you can without making mistakes</p>
-  <p>Make sure your index fingers are on A and L</p>`],
+  `<p>To familiarise yourself with the task, here are ${num_prac_trials} practice trials</p>
+  <p>Make sure your index fingers are on <strong>A</strong> and <strong>L</strong></p>
+  <p>Once you click Next, the practice trials will begin.</p>`],
   show_clickable_nav: true
 }
 
@@ -85,6 +87,29 @@ var trial = {
   sample: {type: 'fixed-repetitions', size: num_trials/4}
 }
 
+
+// PRACTICE =============================================================
+
+var practice_trial = {
+  timeline: [fixation, flanker, feedback],
+  timeline_variables: test_stimuli,
+  sample: {type: 'with-replacement', size: num_prac_trials}
+}
+
+var practice_end = {
+  type: jsPsychInstructions,
+  pages: [`<p>Great! Now you will do the real task.</p>
+  <p>There will be ${num_trials} trials</p>
+  <p>Respond as quickly as you can without making mistakes</p>
+  <p>Make sure your index fingers are on A and L</p>
+  <p>Once you click Next, the task will begin.</p>`],
+  show_clickable_nav: true
+}
+
+var practice = {
+  timeline: [practice_trial, practice_end]
+}
+
 // ENDSCREEN ============================================================
 
 var endscreen = {
@@ -101,10 +126,10 @@ var endscreen = {
     return [`
       <p>Your mean RT for congruent trials is <strong>${Math.round(mrt_cong)} ms</strong>
       <br>
-      You got <strong>${Math.round(accu_cong)}%</strong> of these correct</p>
+      You got <strong>${Math.round(accu_cong * 100)}%</strong> of these correct</p>
       <p>Your mean RT for incongruent trials is <strong>${Math.round(mrt_incong)} ms</strong>
       <br>
-      You got <strong>${Math.round(accu_incong)}%</strong> of these correct</p>
+      You got <strong>${Math.round(accu_incong * 100)}%</strong> of these correct</p>
     `];
   },
   show_clickable_nav: true
@@ -112,6 +137,6 @@ var endscreen = {
 
 // TIMELINE =============================================================
 
-var timeline = [instructions, trial, endscreen];
+var timeline = [instructions, practice, trial, endscreen];
 
 jsPsych.run(timeline);
