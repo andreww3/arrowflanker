@@ -21,6 +21,8 @@ const test_stimuli = [
 
 const key_mapping = {left: 'a', right: 'l'};
 
+const num_trials = 60;
+
 // INSTRUCTIONS =========================================================
 
 var instructions = {
@@ -51,29 +53,28 @@ var flanker = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: jsPsych.timelineVariable('stimulus'),
   data: jsPsych.timelineVariable('data'),
-  choices: ['a', 'l']
+  choices: ['a', 'l'],
+  on_finish: (data) => {
+    console.log(data);
+    var correct_response = key_mapping[data.direction];
+    if (jsPsych.pluginAPI.compareKeys(data.response, correct_response)) {
+      data.correct = true;
+    } else {
+      data.correct = false;
+    }
+  }
 };
 
 var feedback = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: () => {
     var last_trial_data = jsPsych.data.get().last(1).values()[0];
-    var correct_response = key_mapping[last_trial_data.direction];
-    if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
-      return '';
-    } else {
-      return `<div class="stim feedback">WRONG</div>`; // WRONG
-    }
+    return last_trial_data.correct ? '' : `<div class="stim feedback">WRONG</div>`;
   },
   choices: "NO_KEYS",
   trial_duration: () => {
     var last_trial_data = jsPsych.data.get().last(1).values()[0];
-    var correct_response = key_mapping[last_trial_data.direction];
-    if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
-      return 0;
-    } else {
-      return 800; // 800ms
-    }
+    return last_trial_data.correct ? 0 : 800;
   },
   post_trial_gap: 1000    // ITI
 }
@@ -81,7 +82,7 @@ var feedback = {
 var trial = {
   timeline: [fixation, flanker, feedback],
   timeline_variables: test_stimuli,
-  sample: {type: 'fixed-repetitions', size: 15}
+  sample: {type: 'fixed-repetitions', size: num_trials/4}
 }
 
 // ENDSCREEN ============================================================
@@ -92,12 +93,18 @@ var endscreen = {
     // compute mean RTs
     var data_cong = jsPsych.data.get().filter({condition: "congruent"});
     var data_incong = jsPsych.data.get().filter({condition: "incongruent"});
-    var mrt_cong = data_cong.select('rt').mean();
-    var mrt_incong = data_incong.select('rt').mean();
+    var mrt_cong = data_cong.filter({correct: true}).select('rt').mean();
+    var mrt_incong = data_incong.filter({correct: true}).select('rt').mean();
+    var accu_cong = data_cong.filter({correct: true}).count() / (num_trials/2);
+    var accu_incong = data_incong.filter({correct: true}).count() / (num_trials/2);
 
     return [`
-      <p>Your mean congruent RT is ${mrt_cong} ms</p>
-      <p>Your mean incongruent RT is ${mrt_incong} ms</p>
+      <p>Your mean RT for congruent trials is <strong>${Math.round(mrt_cong)} ms</strong>
+      <br>
+      You got <strong>${Math.round(accu_cong)}%</strong> of these correct</p>
+      <p>Your mean RT for incongruent trials is <strong>${Math.round(mrt_incong)} ms</strong>
+      <br>
+      You got <strong>${Math.round(accu_incong)}%</strong> of these correct</p>
     `];
   },
   show_clickable_nav: true
