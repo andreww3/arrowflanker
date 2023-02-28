@@ -19,6 +19,25 @@ const test_stimuli = [
   }
 ];
 
+const prac_stimuli = [
+  {
+    stimulus: '<div class="stim"><<<<<</div>',
+    data: { direction: 'left' }
+  },
+  {
+    stimulus: '<div class="stim">>>>>></div>',
+    data: { direction: 'right' }
+  },
+  {
+    stimulus: '<div class="stim"><<><<</div>',
+    data: { direction: 'right' }
+  },
+  {
+    stimulus: '<div class="stim">>><>></div>',
+    data: { direction: 'left' }
+  }
+];
+
 const key_mapping = {left: 'a', right: 'l'};
 
 const num_trials = 8;
@@ -92,7 +111,7 @@ var trial = {
 
 var practice_trial = {
   timeline: [fixation, flanker, feedback],
-  timeline_variables: test_stimuli,
+  timeline_variables: prac_stimuli,
   sample: {type: 'with-replacement', size: num_prac_trials}
 }
 
