@@ -2,20 +2,20 @@ const jsPsych = initJsPsych();
 
 const test_stimuli = [
   {
-    stimulus: '<p style="font-size: 48px;"><strong><<<<<</strong></p>',
-    data: { condition: 'congruent', direction: 'left'}
+    stimulus: '<div class="stim"><<<<<</div>',
+    data: { condition: 'congruent', direction: 'left' }
   },
   {
-    stimulus: '<p style="font-size: 48px;"><strong>>>>>></strong></p>',
-    data: { condition: 'congruent', direction: 'right'}
+    stimulus: '<div class="stim">>>>>></div>',
+    data: { condition: 'congruent', direction: 'right' }
   },
   {
-    stimulus: '<p style="font-size: 48px;"><strong><<><<</strong></p>',
-    data: { condition: 'incongruent', direction: 'right'}
+    stimulus: '<div class="stim"><<><<</div>',
+    data: { condition: 'incongruent', direction: 'right' }
   },
   {
-    stimulus: '<p style="font-size: 48px;"><strong>>><>></strong></p>',
-    data: { condition: 'incongruent', direction: 'left'}
+    stimulus: '<div class="stim">>><>></div>',
+    data: { condition: 'incongruent', direction: 'left' }
   }
 ];
 
@@ -23,7 +23,7 @@ const test_stimuli = [
 
 var fixation = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: '<p style="font-size: 48px;">+</p>',
+  stimulus: '<div class="stim">+</div>',
   choices: "NO_KEYS",
   trial_duration: 400,
 };
@@ -37,10 +37,13 @@ var flanker = {
 
 var feedback = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "WRONG",
+  stimulus: `<div class="stim feedback">WRONG</div>`,
   choices: "NO_KEYS",
-  trial_duration: (data) => {
-    console.log(data);
+  trial_duration: () => {
+    var jspsych_data = jsPsych.data.get();
+    console.log(jspsych_data);
+    //var last_trial_correct = jspsych_data.last(1).values()[0].correct;
+    return 800;
   },
   post_trial_gap: 1000
 }
