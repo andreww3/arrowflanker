@@ -19,6 +19,14 @@ const test_stimuli = [
   }
 ];
 
+// INSTRUCTIONS =========================================================
+
+var instructions = {
+  type: jsPsychInstructions,
+  pages: [],
+  show_clickable_nav: true
+}
+
 // TRIAL ================================================================
 
 var fixation = {
@@ -44,29 +52,14 @@ var feedback = {
     console.log(last_trial_data);
     var key_mapping = {left: 'a', right: 'l'};
     var correct_response = key_mapping[last_trial_data.direction];
-    if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { //correct response
+    if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
       return 0;
     } else {
       return 800;
     }
   },
-  post_trial_gap: 1000
+  post_trial_gap: 1000    // ITI
 }
-
-// var feedback_timeline = {
-//   timeline: [feedback],
-//   conditional_function: () => {
-
-//   }
-// }
-
-// var iti = {
-//   type: jsPsychHtmlKeyboardResponse,
-//   stimulus: '<p style="font-size: 48px;">+</p>',
-//   choices: "NO_KEYS",
-//   trial_duration: 400,
-// };
-
 
 var trial = {
   timeline: [fixation, flanker, feedback],
@@ -74,7 +67,15 @@ var trial = {
   sample: {type: 'fixed-repetitions', size: 15}
 }
 
-// TIMELINE =================================================================
+// ENDSCREEN ============================================================
+
+var endscreen = {
+  type: jsPsychInstructions,
+  pages: [],
+  show_clickable_nav: true
+}
+
+// TIMELINE =============================================================
 
 var timeline = [trial];
 
