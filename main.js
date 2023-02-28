@@ -80,10 +80,16 @@ var trial = {
 var endscreen = {
   type: jsPsychInstructions,
   pages: () => {
+    // compute mean RTs
     var data_cong = jsPsych.data.get().filter({condition: "congruent"});
     var data_incong = jsPsych.data.get().filter({condition: "incongruent"});
-    var mrt_cong = data_cong.select('correct').sum();
-    var mrt_incong = data_cong.select('correct').sum();
+    var mrt_cong = data_cong.select('rt').mean();
+    var mrt_incong = data_incong.select('rt').mean();
+
+    return [`
+      <p>Your mean congruent RT is ${mrt_cong} ms</p>
+      <p>Your mean incongruent RT is ${mrt_incong} ms</p>
+    `];
   },
   show_clickable_nav: true
 }
