@@ -40,7 +40,7 @@ const prac_stimuli = [
 
 const key_mapping = {left: 'a', right: 'l'};
 
-const num_trials = 8;
+const num_trials = 60;
 const num_prac_trials = 5;
 
 // INSTRUCTIONS =========================================================
@@ -122,7 +122,9 @@ var practice_end = {
   <p>Respond as quickly as you can without making mistakes</p>
   <p>Make sure your index fingers are on A and L</p>
   <p>Once you click Next, the task will begin.</p>`],
-  show_clickable_nav: true
+  show_clickable_nav: true,
+  allow_backward: false,
+  button_label_next: "Next"
 }
 
 var practice = {
