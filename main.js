@@ -53,7 +53,7 @@ var feedback = {
     if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
       return '';
     } else {
-      return `<div class="stim feedback">WRONG</div>`;
+      return `<div class="stim feedback">WRONG</div>`; // WRONG
     }
   },
   choices: "NO_KEYS",
@@ -63,7 +63,7 @@ var feedback = {
     if (jsPsych.pluginAPI.compareKeys(last_trial_data.response, correct_response)) { // if correct response
       return 0;
     } else {
-      return 800;
+      return 800; // 800ms
     }
   },
   post_trial_gap: 1000    // ITI
@@ -82,6 +82,8 @@ var endscreen = {
   pages: () => {
     var data_cong = jsPsych.data.get().filter({condition: "congruent"});
     var data_incong = jsPsych.data.get().filter({condition: "incongruent"});
+    var mrt_cong = data_cong.select('correct').sum();
+    var mrt_incong = data_cong.select('correct').sum();
   },
   show_clickable_nav: true
 }
