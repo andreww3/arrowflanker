@@ -146,13 +146,20 @@ var endscreen = {
     var accu_cong = data_cong.filter({correct: true}).count() / (num_trials/2);
     var accu_incong = data_incong.filter({correct: true}).count() / (num_trials/2);
 
+
+    var cong_text = accu_cong==0 ? 
+      `<p>You got <strong>${Math.round(accu_cong * 100)}%</strong> of congruent trials correct</p>` : 
+      `<p>Your mean RT for congruent trials is <strong>${Math.round(mrt_cong)} ms</strong><br>
+      You got <strong>${Math.round(accu_cong * 100)}%</strong> of these correct</p>`
+    var incong_text = accu_incong==0 ? 
+      `<p>You got <strong>${Math.round(accu_incong * 100)}%</strong> of incongruent trials correct</p>` :
+      `<p>Your mean RT for incongruent trials is <strong>${Math.round(mrt_incong)} ms</strong><br>
+      You got <strong>${Math.round(accu_incong * 100)}%</strong> of these correct</p>`
+
     return [`
-      <p>Your mean RT for congruent trials is <strong>${Math.round(mrt_cong)} ms</strong>
-      <br>
-      You got <strong>${Math.round(accu_cong * 100)}%</strong> of these correct</p>
-      <p>Your mean RT for incongruent trials is <strong>${Math.round(mrt_incong)} ms</strong>
-      <br>
-      You got <strong>${Math.round(accu_incong * 100)}%</strong> of these correct</p>
+      ${cong_text}
+      ${incong_text}
+      <p><br><br>Close this tab to end the experiment.</p>
     `];
   },
   show_clickable_nav: false,
