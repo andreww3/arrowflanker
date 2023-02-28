@@ -117,11 +117,13 @@ var practice_trial = {
 
 var practice_end = {
   type: jsPsychInstructions,
-  pages: [`<p>Great! Now you will do the real task.</p>
-  <p>There will be ${num_trials} trials</p>
-  <p>Respond as quickly as you can without making mistakes</p>
-  <p>Make sure your index fingers are on A and L</p>
-  <p>Once you click Next, the task will begin.</p>`],
+  pages: [`
+    <p>Great! Now you will do the real task.</p>
+    <p>There will be ${num_trials} trials</p>
+    <p>Respond as quickly as you can without making mistakes</p>
+    <p>Make sure your index fingers are on A and L</p>
+    <p>Once you click Next, the task will begin.</p>
+  `],
   show_clickable_nav: true,
   allow_backward: false,
   button_label_next: "Next"
