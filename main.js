@@ -21,7 +21,7 @@ const test_stimuli = [
 
 const key_mapping = {left: 'a', right: 'l'};
 
-const num_trials = 60;
+const num_trials = 8;
 
 // INSTRUCTIONS =========================================================
 
