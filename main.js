@@ -72,7 +72,7 @@ var countdown_trial = {
 
 var countdown = {
   timeline: [countdown_trial],
-  timeline_variables: [{stim: '<div class="stim">Get Ready</div>'}, {stim: '<div class="stim">3</div>'}, {stim: '<div class="stim">2</div>'}, {stim: '<div class="stim">1/div>'}]
+  timeline_variables: [{stim: '<div class="stim">Get Ready</div>'}, {stim: '<div class="stim">3</div>'}, {stim: '<div class="stim">2</div>'}, {stim: '<div class="stim">1</div>'}]
 }
 
 // TRIAL ================================================================
