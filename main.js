@@ -57,8 +57,22 @@ var instructions = {
 
   `<p>To familiarise yourself with the task, here are ${num_prac_trials} practice trials</p>
   <p>Make sure your index fingers are on <strong>A</strong> and <strong>L</strong></p>
+  <p>The trials will progress automatically, one after the other.</p>
+  <p>Respond as quickly as you can without making mistakes</p>
   <p>Once you click Next, the practice trials will begin.</p>`],
   show_clickable_nav: true
+}
+
+var countdown_trial = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: jsPsych.timelineVariable('stim'),
+  choices: "NO_KEYS",
+  trial_duration: 800,
+};
+
+var countdown = {
+  timeline: [countdown_trial],
+  timeline_variables: [{stim: '<div class="stim">Get Ready</div>'}, {stim: '<div class="stim">3</div>'}, {stim: '<div class="stim">2</div>'}, {stim: '<div class="stim">1/div>'}]
 }
 
 // TRIAL ================================================================
@@ -120,7 +134,6 @@ var practice_end = {
   pages: [`
     <p>Great! Now you will do the real task.</p>
     <p>There will be ${num_trials} trials</p>
-    <p>Respond as quickly as you can without making mistakes</p>
     <p>Make sure your index fingers are on A and L</p>
     <p>Once you click Next, the task will begin.</p>
   `],
@@ -134,6 +147,18 @@ var practice = {
 }
 
 // ENDSCREEN ============================================================
+
+var end_instructions = {
+  type: jsPsychInstructions,
+  pages: [`
+    <p>That's the end of the experiment!</p>
+    <p>Click Next to see your data</p>
+    <p>Remember to write down your data and record it on the spreadsheet, as directed by your tutor.</p>
+  `],
+  show_clickable_nav: true,
+  allow_backward: false,
+  button_label_next: "Next"
+}
 
 var endscreen = {
   type: jsPsychInstructions,
@@ -168,6 +193,5 @@ var endscreen = {
 
 // TIMELINE =============================================================
 
-var timeline = [instructions, practice, trial, endscreen];
-
+var timeline = [instructions, countdown, practice, countdown, trial, end_instructions, endscreen];
 jsPsych.run(timeline);
