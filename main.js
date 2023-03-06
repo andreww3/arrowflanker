@@ -39,27 +39,35 @@ const prac_stimuli = [
 ];
 
 const key_mapping = {left: 'a', right: 'l'};
+const button_mapping = {left: 0, right: 1}; // indices in choices array for button plugin
 
 const num_trials = 60;
 const num_prac_trials = 5;
 
 // INSTRUCTIONS =========================================================
 
+var browser_check = {
+  type: jsPsychBrowserCheck
+};
+
 var instructions = {
   type: jsPsychInstructions,
-  pages: [`<p>In this task, you will see five arrows on the screen, like the example below.</p>
+  pages: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return [`<p>In this task, you will see five arrows on the screen, like the example below.</p>
   <p class="stim"><<><<</p>
   <p>Your job is to indicate which direction the <strong>middle</strong> arrow is pointing.</p>`,
 
-  `<p>Press <strong>A</strong> if the middle arrow is pointing left. (<)<br>
-  Press <strong>L</strong> if it is pointing right. (>)</p>
+  `<p>Press <strong>${browser_data.mobile ? "Left" : "A"}</strong> if the middle arrow is pointing left. (<)<br>
+  Press <strong>${browser_data.mobile ? "Right" : "L"}</strong> if it is pointing right. (>)</p>
   <p>Ignore the arrows on each side of the middle arrow - they are distractors.</p>`,
 
   `<p>To familiarise yourself with the task, here are ${num_prac_trials} practice trials</p>
-  <p>Make sure your index fingers are on <strong>A</strong> and <strong>L</strong></p>
+  <p>${browser_data.mobile ? '' : `Make sure your index fingers are on <strong>A</strong> and <strong>L</strong>`}</p>
   <p>The trials will progress automatically, one after the other.</p>
   <p>Respond as quickly as you can without making mistakes</p>
-  <p>Once you click Next, the practice trials will begin.</p>`],
+  <p>Once you click Next, the practice trials will begin.</p>`]
+  },
   show_clickable_nav: true
 }
 
@@ -100,6 +108,22 @@ var flanker = {
   }
 };
 
+var flanker_button = {
+  type: jsPsychHtmlButtonResponse,
+  stimulus: () => {return `<div class="mobile">${jsPsych.timelineVariable('stimulus')}</div>`},
+  data: jsPsych.timelineVariable('data'),
+  choices: ['Left', 'Right'],
+  button_html: ['<button class="jspsych-btn left">%choice%</button>', '<button class="jspsych-btn right">%choice%</button>'],
+  on_finish: (data) => {
+    var correct_response = button_mapping[data.direction];
+    if (data.response === correct_response) {
+      data.correct = true;
+    } else {
+      data.correct = false;
+    }
+  }
+};
+
 var feedback = {
   type: jsPsychHtmlKeyboardResponse,
   stimulus: () => {
@@ -117,7 +141,21 @@ var feedback = {
 var trial = {
   timeline: [fixation, flanker, feedback],
   timeline_variables: test_stimuli,
-  sample: {type: 'fixed-repetitions', size: num_trials/4}
+  sample: {type: 'fixed-repetitions', size: num_trials/4},
+  conditional_function: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return !browser_data.mobile // run if mobile == false
+  }
+}
+
+var trial_touchscreen = {
+  timeline: [fixation, flanker_button, feedback],
+  timeline_variables: test_stimuli,
+  sample: {type: 'fixed-repetitions', size: num_trials/4},
+  conditional_function: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return browser_data.mobile // run if mobile == true
+  }
 }
 
 
@@ -126,24 +164,41 @@ var trial = {
 var practice_trial = {
   timeline: [fixation, flanker, feedback],
   timeline_variables: prac_stimuli,
-  sample: {type: 'with-replacement', size: num_prac_trials}
+  sample: {type: 'with-replacement', size: num_prac_trials},
+  conditional_function: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return !browser_data.mobile // run if mobile == false
+  }
+}
+
+var practice_trial_touchscreen = {
+  timeline: [fixation, flanker_button, feedback],
+  timeline_variables: prac_stimuli,
+  sample: {type: 'with-replacement', size: num_prac_trials},
+  conditional_function: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return browser_data.mobile // run if mobile == true
+  }
 }
 
 var practice_end = {
   type: jsPsychInstructions,
-  pages: [`
+  pages: () => {
+    var browser_data = jsPsych.data.get().filter({trial_type: "browser-check"}).values()[0];
+    return [`
     <p>Great! Now you will do the real task.</p>
     <p>There will be ${num_trials} trials</p>
-    <p>Make sure your index fingers are on A and L</p>
+    <p>${browser_data.mobile ? '' : "Make sure your index fingers are on A and L"}</p>
     <p>Once you click Next, the task will begin.</p>
-  `],
+    `]
+  },
   show_clickable_nav: true,
   allow_backward: false,
   button_label_next: "Next"
 }
 
 var practice = {
-  timeline: [practice_trial, practice_end]
+  timeline: [practice_trial, practice_trial_touchscreen, practice_end]
 }
 
 // ENDSCREEN ============================================================
@@ -193,5 +248,5 @@ var endscreen = {
 
 // TIMELINE =============================================================
 
-var timeline = [instructions, countdown, practice, countdown, trial, end_instructions, endscreen];
+var timeline = [browser_check, instructions, countdown, practice, countdown, trial, trial_touchscreen, end_instructions, endscreen];
 jsPsych.run(timeline);

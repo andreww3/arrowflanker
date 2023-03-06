@@ -5,6 +5,19 @@
   letter-spacing: 5px;
 }
 
+.mobile {
+  margin-top: 120px;
+  margin-bottom: 100px;
+}
+
+.left {
+  margin-right: 150px;
+}
+
+.right {
+  margin-left: 150px;
+}
+
 .feedback {
   color: crimson;
 }
